@@ -1,0 +1,12 @@
+﻿# Gentle AI local artifacts (skill registry, etc.)
+.atl/
+
+# Visual Studio
+.vs/
+
+# Build outputs (also covered by nested .gitignore, kept here for safety)
+bin/
+obj/
+*.db
+*.db-shm
+*.db-wal
