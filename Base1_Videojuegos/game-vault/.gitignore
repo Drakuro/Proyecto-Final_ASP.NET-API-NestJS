@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+.vite/
+
+# Test and coverage output
+coverage/
+.nyc_output/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Local databases and generated Prisma client
+*.db
+*.db-journal
+game-vault-query-api/src/generated/prisma/
+
+# Logs
+*.log
+logs/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.agents/
+.claude/
+.windsurf/
+*.swp
+
+# Temporary files
+tmp/
+temp/
