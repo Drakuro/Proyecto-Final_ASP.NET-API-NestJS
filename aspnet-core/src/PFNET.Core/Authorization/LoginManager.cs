@@ -41,4 +41,16 @@ public class LogInManager : AbpLogInManager<Tenant, Role, User>
               claimsPrincipalFactory)
     {
     }
+
+    // SQLite + ABP: SaveLoginAttemptAsync abre una segunda escritura dentro de
+    // la misma unidad de trabajo y produce "database is locked" (SQLite no
+    // soporta escrituras concurrentes). Se desactiva el registro de intentos de
+    // login para que el flujo de autenticacion sea estable. El JWT se emite igual.
+    public override System.Threading.Tasks.Task SaveLoginAttemptAsync(
+        AbpLoginResult<Tenant, User> loginResult,
+        string tenancyName,
+        string userNameOrEmailAddress)
+    {
+        return System.Threading.Tasks.Task.CompletedTask;
+    }
 }

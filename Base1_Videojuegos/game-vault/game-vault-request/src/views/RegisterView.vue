@@ -3,6 +3,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 const email = ref('');
 const password = ref('');
 const error = ref('');
@@ -13,7 +15,7 @@ async function registrarse() {
 	cargando.value = true;
 
 	try {
-		const respuesta = await fetch('http://localhost:3000/auth/register', {
+		const respuesta = await fetch(`${API_BASE_URL}/auth/register`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email: email.value, password: password.value }),

@@ -9,6 +9,7 @@ interface Videojuego {
 }
 
 const router = useRouter();
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 const videojuegos = ref<Videojuego[]>([]);
 const textoBusqueda = ref('');
 const cargando = ref(true);
@@ -39,7 +40,7 @@ const videojuegosPaginados = computed(() => {
 
 async function cargarVideojuegos() {
 	try {
-		const respuesta = await fetch('http://localhost:3000/videojuegos');
+		const respuesta = await fetch(`${API_BASE_URL}/videojuegos`);
 		if (!respuesta.ok) throw new Error('No se pudieron cargar los videojuegos');
 		videojuegos.value = await respuesta.json();
 	} catch (e) {
@@ -64,8 +65,8 @@ async function guardarVideojuego() {
 
 	const editando = videojuegoEditandoId.value !== null;
 	const url = editando
-		? `http://localhost:3000/videojuegos/${videojuegoEditandoId.value}`
-		: 'http://localhost:3000/videojuegos';
+		? `${API_BASE_URL}/videojuegos/${videojuegoEditandoId.value}`
+		: `${API_BASE_URL}/videojuegos`;
 
 	try {
 		const respuesta = await fetch(url, {
@@ -117,7 +118,7 @@ async function eliminarVideojuego(id: number) {
 	if (!window.confirm('¿Deseas eliminar este videojuego?')) return;
 
 	try {
-		const respuesta = await fetch(`http://localhost:3000/videojuegos/${id}`, {
+		const respuesta = await fetch(`${API_BASE_URL}/videojuegos/${id}`, {
 			method: 'DELETE',
 			headers: obtenerHeadersAutenticados(),
 		});

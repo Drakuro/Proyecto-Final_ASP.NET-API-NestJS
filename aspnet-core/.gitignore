@@ -269,3 +269,7 @@ src/**/appsettings.Development.json
 # Environment-specific settings with secrets
 src/**/appsettings.Staging.json
 src/**/appsettings.Production.json
+
+# Runtime logs
+**/App_Data/
+*.log
