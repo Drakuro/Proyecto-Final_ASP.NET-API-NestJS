@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
 using System;
 using System.IO;
 using System.Linq;
@@ -69,6 +70,12 @@ namespace PFNET.Web.Host.Startup
             // Swagger - Enable this line and the related lines in Configure method to enable swagger UI
             ConfigureSwagger(services);
 
+            // OpenAPI document (Microsoft.AspNetCore.OpenApi) with JWT Bearer security scheme
+            services.AddOpenApi(options =>
+            {
+                options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+            });
+
             // Configure Abp and Dependency Injection
             services.AddAbpWithoutCreatingServiceProvider<PFNETWebHostModule>(
                 // Configure Log4Net logging
@@ -99,6 +106,8 @@ namespace PFNET.Web.Host.Startup
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<AbpCommonHub>("/signalr");
+                endpoints.MapOpenApi();            // OpenAPI document: /openapi/v1.json
+                endpoints.MapScalarApiReference(); // Interactive UI: /scalar
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
             });

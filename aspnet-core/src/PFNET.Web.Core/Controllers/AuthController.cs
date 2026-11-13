@@ -1,10 +1,11 @@
 ﻿using Abp.Authorization;
 using Abp.Authorization.Users;
-using Abp.MultiTenancy;
+using Abp.MultiTenancy;
 using Abp.UI;
 using Abp.Runtime.Session;
 using Abp.Web.Models;
 using Abp.Runtime.Security;
+using Abp.Runtime.Validation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
@@ -47,10 +48,13 @@ namespace PFNET.Controllers
 
         [HttpPost("register")]
         [AbpAllowAnonymous]
+        [DisableValidation] // evita que ABP lance AbpValidationException (500); se valida abajo y se responde 400
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             // Validacion basica (paridad con NestJS class-validator)
-            if (string.IsNullOrWhiteSpace(model.Email) || model.Password == null || model.Password.Length < 8)
+            // model == null / ModelState invalido: JSON mal formado o con tipos incorrectos (ej. password numerico)
+            if (model == null || !ModelState.IsValid
+                || string.IsNullOrWhiteSpace(model.Email) || model.Password == null || model.Password.Length < 8)
             {
                 return BadRequest(new { message = "Validation failed" });
             }
@@ -103,8 +107,15 @@ namespace PFNET.Controllers
 
         [HttpPost("login")]
         [AbpAllowAnonymous]
+        [DisableValidation]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
+            if (model == null || !ModelState.IsValid
+                || string.IsNullOrWhiteSpace(model.Email) || string.IsNullOrEmpty(model.Password))
+            {
+                return BadRequest(new { message = "Validation failed" });
+            }
+
             var tenancyName = GetTenancyNameOrNull();
             var loginResult = await _logInManager.LoginAsync(model.Email, model.Password, tenancyName);
 
