@@ -52,8 +52,8 @@
 
 | Requerimiento | Estado | Nota |
 |---|---|---|
-| Generar OpenAPI con `Microsoft.AspNetCore.OpenApi` | ❌ | Se usa Swashbuckle (ABP default). Opcional/bonificación. |
-| Interfaz interactiva (Scalar/Swagger UI) con Bearer | ✅ | Swagger UI en `/swagger` con `bearerAuth`. |
+| Generar OpenAPI con `Microsoft.AspNetCore.OpenApi` | ✅ | `AddOpenApi` + `MapOpenApi` (`/openapi/v1.json`) con transformador `BearerSecuritySchemeTransformer`. Requiere `Castle.Windsor.MsDependencyInjection` 5.1.0 (la 4.1.0 no soporta servicios keyed). |
+| Interfaz interactiva (Scalar/Swagger UI) con Bearer | ✅ | Scalar en `/scalar` (esquema HTTP Bearer/JWT) y Swagger UI en `/swagger`. |
 
 ## 2. Cambios aplicados en esta sesión
 
@@ -111,7 +111,7 @@ Propiedades JSON (camelCase): `id`, `nombreDelJuego`, `imagenDelJuego`, `email`,
 
 ### Plus (OpenAPI)
 
-- [ ] `/swagger` carga (Swashbuckle). `Microsoft.AspNetCore.OpenApi` no implementado (opcional).
+- [x] `/openapi/v1.json` y `/scalar` cargan; `/swagger` (Swashbuckle) sigue activo.
 
 ## 5. Riesgos y notas
 
@@ -131,7 +131,7 @@ Propiedades JSON (camelCase): `id`, `nombreDelJuego`, `imagenDelJuego`, `email`,
 - [x] WP3 Controllers/contrato — verificado en vivo
 - [x] WP4 Auth JWT — verificado + fix login
 - [x] WP5 CORS — configurado
-- [ ] WP6 OpenAPI con `Microsoft.AspNetCore.OpenApi` (Plus, opcional, no implementado)
+- [x] WP6 OpenAPI con `Microsoft.AspNetCore.OpenApi` + Scalar (Plus) — implementado y verificado
 - [x] WP7 Vue env var — implementado y build OK
 - [ ] WP8 Verificación frontend completa (pendiente de ejecutar manualmente)
 
